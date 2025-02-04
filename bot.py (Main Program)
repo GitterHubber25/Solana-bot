@@ -1,0 +1,38 @@
+import requests
+import time
+import yaml
+
+class SimpleSolanaBot:
+    def __init__(self):
+        self.load_config()
+        self.last_checked = 0
+        
+    def load_config(self):
+        with open('config.yaml') as f:
+            self.config = yaml.safe_load(f)
+        
+    def check_token(self, token_address):
+        # Rugcheck verification
+        rugcheck = requests.get(
+            f"https://api.rugcheck.xyz/api/v1/tokens/{token_address}/report",
+            headers={"x-api-key": self.config['rugcheck_api']}
+        ).json()
+        
+        # Tweetscout verification
+        tweetscout = requests.post(
+            "https://api.tweetscout.io/v1/analyze",
+            headers={"Authorization": f"Bearer {self.config['tweetscout_api']}"},
+            json={"query": token_address}
+        ).json()
+        
+        return rugcheck['is_safe'] and tweetscout['verified']
+
+    def run(self):
+        while True:
+            # This is where you would add actual token checking logic
+            print("Checking new tokens...")
+            time.sleep(60)  # Check every minute
+
+if __name__ == "__main__":
+    bot = SimpleSolanaBot()
+    bot.run()
