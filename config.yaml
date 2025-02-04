@@ -1,0 +1,12 @@
+rugcheck_api: "YOUR_API_KEY"
+tweetscout_api: "YOUR_API_KEY"
+solana_rpc: "https://api.mainnet-beta.solana.com"
+
+safety_checks:
+  min_liquidity: 1000
+  min_holders: 100
+  max_supply: 1000000000
+
+blacklist:
+  coins: []
+  developers: []
